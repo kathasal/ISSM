@@ -427,6 +427,11 @@ const char* EnumToStringx(int en){
 		case MasstransportStabilizationEnum : return "MasstransportStabilization";
 		case MmemasstransportModelidsEnum : return "MmemasstransportModelids";
 		case MmemasstransportPartitionEnum : return "MmemasstransportPartition";
+		case MaterialsArrheniusAminusEnum : return "MaterialsArrheniusAminus";
+		case MaterialsArrheniusAplusEnum : return "MaterialsArrheniusAplus";
+		case MaterialsArrheniusQminusEnum : return "MaterialsArrheniusQminus";
+		case MaterialsArrheniusQplusEnum : return "MaterialsArrheniusQplus";
+		case MaterialsArrheniusTrefEnum : return "MaterialsArrheniusTref";
 		case MaterialsBetaEnum : return "MaterialsBeta";
 		case MaterialsEarthDensityEnum : return "MaterialsEarthDensity";
 		case MaterialsEffectiveconductivityAveragingEnum : return "MaterialsEffectiveconductivityAveraging";

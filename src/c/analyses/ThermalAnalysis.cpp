@@ -658,6 +658,7 @@ void           ThermalAnalysis::GradientJ(Vector<IssmDouble>* gradient,Element* 
 void           ThermalAnalysis::InputUpdateFromSolution(IssmDouble* solution,Element* element){/*{{{*/
 
 	bool        converged;
+	IssmDouble  Aminus, Aplus, Qminus, Qplus, Tref; /* Arrhenius parameters */
 	int         i,rheology_law;
 	int        *doflist   = NULL;
 	IssmDouble *xyz_list  = NULL;
@@ -696,6 +697,14 @@ void           ThermalAnalysis::InputUpdateFromSolution(IssmDouble* solution,Ele
 
 	/*Get all inputs and parameters*/
 	element->GetInputValue(&converged,ConvergedEnum);
+
+	/*Parameters for arrhenius*/
+	Aminus = element->FindParam(MaterialsArrheniusAminusEnum);
+	Aplus  = element->FindParam(MaterialsArrheniusAplusEnum);
+	Qminus = element->FindParam(MaterialsArrheniusQminusEnum);
+	Qplus  = element->FindParam(MaterialsArrheniusQplusEnum);
+	Tref   = element->FindParam(MaterialsArrheniusTrefEnum);
+
 	if(converged){
 		element->AddInput(TemperatureEnum,values,element->GetElementType());
 
@@ -738,7 +747,7 @@ void           ThermalAnalysis::InputUpdateFromSolution(IssmDouble* solution,Ele
 				break;
 			case ArrheniusEnum:{
 				element->GetVerticesCoordinates(&xyz_list);
-				for(i=0;i<numnodes;i++) B[i]=Arrhenius(values[i],surface[i]-xyz_list[i*3+2],n[i]);
+				for(i=0;i<numnodes;i++) B[i]=Arrhenius(values[i],surface[i]-xyz_list[i*3+2],n[i],Aminus,Aplus,Tref,Qplus,Qminus);
 				element->AddInput(MaterialsRheologyBEnum,&B[0],element->GetElementType());
 				break;
 				}

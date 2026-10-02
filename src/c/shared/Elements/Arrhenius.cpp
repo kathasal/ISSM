@@ -6,7 +6,7 @@
 #include "../Numerics/types.h"
 #include "../Exceptions/exceptions.h"
 
-IssmDouble Arrhenius(IssmDouble temperature,IssmDouble depth,IssmDouble n){
+IssmDouble Arrhenius(IssmDouble temperature,IssmDouble depth,IssmDouble n, IssmDouble Aminus, IssmDouble Aplus, IssmDouble Tref, IssmDouble Qplus, IssmDouble Qminus){
 	/*Use EISMINT Parameterization for the rheology: Payne2000
 	 *
 	 *  A(T*) = A0 exp(-Q/RT*)
@@ -37,11 +37,13 @@ IssmDouble Arrhenius(IssmDouble temperature,IssmDouble depth,IssmDouble n){
 	_assert_(Tstar>0);
 
 	/*Get A*/
-	if(Tstar<263.15){
-		A=3.61e-13*exp(  -6.e+4/(R*Tstar));
+	if(Tstar<Tref){
+		A=Aminus*exp(-Qminus/(R*Tstar));
+		//A=3.61e-13*exp(  -6.e+4/(R*Tstar));
 	}
 	else{
-		A=1.73e+3 *exp(-13.9e+4/(R*Tstar));
+		A=Aplus*exp(-Qplus/(R*Tstar));
+		//A=1.73e+3 *exp(-13.9e+4/(R*Tstar));
 	}
 
 	/*Convert to B*/

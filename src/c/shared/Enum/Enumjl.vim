@@ -418,6 +418,11 @@ syn keyword juliaConstC MmemasstransportRequestedOutputsEnum
 syn keyword juliaConstC MasstransportStabilizationEnum
 syn keyword juliaConstC MmemasstransportModelidsEnum
 syn keyword juliaConstC MmemasstransportPartitionEnum
+syn keyword juliaConstC MaterialsArrheniusAminusEnum
+syn keyword juliaConstC MaterialsArrheniusAplusEnum
+syn keyword juliaConstC MaterialsArrheniusQminusEnum
+syn keyword juliaConstC MaterialsArrheniusQplusEnum
+syn keyword juliaConstC MaterialsArrheniusTrefEnum
 syn keyword juliaConstC MaterialsBetaEnum
 syn keyword juliaConstC MaterialsEarthDensityEnum
 syn keyword juliaConstC MaterialsEffectiveconductivityAveragingEnum

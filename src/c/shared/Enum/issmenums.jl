@@ -414,6 +414,11 @@
 	MasstransportStabilizationEnum
 	MmemasstransportModelidsEnum
 	MmemasstransportPartitionEnum
+	MaterialsArrheniusAminusEnum
+	MaterialsArrheniusAplusEnum
+	MaterialsArrheniusQminusEnum
+	MaterialsArrheniusQplusEnum
+	MaterialsArrheniusTrefEnum
 	MaterialsBetaEnum
 	MaterialsEarthDensityEnum
 	MaterialsEffectiveconductivityAveragingEnum
@@ -4288,6 +4293,11 @@ function EnumToString(enum::IssmEnum)
 	if(enum==MasstransportStabilizationEnum) return "MasstransportStabilization" end
 	if(enum==MmemasstransportModelidsEnum) return "MmemasstransportModelids" end
 	if(enum==MmemasstransportPartitionEnum) return "MmemasstransportPartition" end
+	if(enum==MaterialsArrheniusAminusEnum) return "MaterialsArrheniusAminus" end
+	if(enum==MaterialsArrheniusAplusEnum) return "MaterialsArrheniusAplus" end
+	if(enum==MaterialsArrheniusQminusEnum) return "MaterialsArrheniusQminus" end
+	if(enum==MaterialsArrheniusQplusEnum) return "MaterialsArrheniusQplus" end
+	if(enum==MaterialsArrheniusTrefEnum) return "MaterialsArrheniusTref" end
 	if(enum==MaterialsBetaEnum) return "MaterialsBeta" end
 	if(enum==MaterialsEarthDensityEnum) return "MaterialsEarthDensity" end
 	if(enum==MaterialsEffectiveconductivityAveragingEnum) return "MaterialsEffectiveconductivityAveraging" end
@@ -8162,6 +8172,11 @@ function StringToEnum(name::String)
 	if(name=="MasstransportStabilization") return MasstransportStabilizationEnum  end
 	if(name=="MmemasstransportModelids") return MmemasstransportModelidsEnum  end
 	if(name=="MmemasstransportPartition") return MmemasstransportPartitionEnum  end
+	if(name=="MaterialsArrheniusAminus") return MaterialsArrheniusAminusEnum  end
+	if(name=="MaterialsArrheniusAplus") return MaterialsArrheniusAplusEnum  end
+	if(name=="MaterialsArrheniusQminus") return MaterialsArrheniusQminusEnum  end
+	if(name=="MaterialsArrheniusQplus") return MaterialsArrheniusQplusEnum  end
+	if(name=="MaterialsArrheniusTref") return MaterialsArrheniusTrefEnum  end
 	if(name=="MaterialsBeta") return MaterialsBetaEnum  end
 	if(name=="MaterialsEarthDensity") return MaterialsEarthDensityEnum  end
 	if(name=="MaterialsEffectiveconductivityAveraging") return MaterialsEffectiveconductivityAveragingEnum  end

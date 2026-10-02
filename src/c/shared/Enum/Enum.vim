@@ -425,6 +425,11 @@ syn keyword cConstant MmemasstransportRequestedOutputsEnum
 syn keyword cConstant MasstransportStabilizationEnum
 syn keyword cConstant MmemasstransportModelidsEnum
 syn keyword cConstant MmemasstransportPartitionEnum
+syn keyword cConstant MaterialsArrheniusAminusEnum
+syn keyword cConstant MaterialsArrheniusAplusEnum
+syn keyword cConstant MaterialsArrheniusQminusEnum
+syn keyword cConstant MaterialsArrheniusQplusEnum
+syn keyword cConstant MaterialsArrheniusTrefEnum
 syn keyword cConstant MaterialsBetaEnum
 syn keyword cConstant MaterialsEarthDensityEnum
 syn keyword cConstant MaterialsEffectiveconductivityAveragingEnum

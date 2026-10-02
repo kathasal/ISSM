@@ -1387,6 +1387,7 @@ void           EnthalpyAnalysis::GradientJ(Vector<IssmDouble>* gradient,Element*
 void           EnthalpyAnalysis::InputUpdateFromSolution(IssmDouble* solution,Element* element){/*{{{*/
 
 	bool        converged;
+	IssmDouble  Aminus, Aplus, Qminus, Qplus, Tref; /* Arrhenius parameters */
 	int         i,rheology_law;
 	int        *doflist   = NULL;
 	IssmDouble *xyz_list  = NULL;
@@ -1415,6 +1416,14 @@ void           EnthalpyAnalysis::InputUpdateFromSolution(IssmDouble* solution,El
 	/*Get all inputs and parameters*/
 	element->GetInputValue(&converged,ConvergedEnum);
 	element->GetInputListOnNodes(&pressure[0],PressureEnum);
+
+	/*Parameters for arrhenius*/
+	Aminus = element->FindParam(MaterialsArrheniusAminusEnum);
+	Aplus  = element->FindParam(MaterialsArrheniusAplusEnum);
+	Qminus = element->FindParam(MaterialsArrheniusQminusEnum);
+	Qplus  = element->FindParam(MaterialsArrheniusQplusEnum);
+	Tref   = element->FindParam(MaterialsArrheniusTrefEnum);
+
 	int finite_element = element->GetElementType(); if(finite_element==P1Enum) finite_element = P1DGEnum;
 	if(converged){
 		for(i=0;i<numnodes;i++){
@@ -1468,7 +1477,7 @@ void           EnthalpyAnalysis::InputUpdateFromSolution(IssmDouble* solution,El
 				break;
 			case ArrheniusEnum:{
 				element->GetVerticesCoordinates(&xyz_list);
-				for(i=0;i<numnodes;i++) B[i]=Arrhenius(temperature[i],surface[i]-xyz_list[i*3+2],n[i]);
+				for(i=0;i<numnodes;i++) B[i]=Arrhenius(temperature[i],surface[i]-xyz_list[i*3+2],n[i],Aminus,Aplus,Tref,Qplus,Qminus);
 				element->AddInput(MaterialsRheologyBEnum,&B[0],finite_element);
 				break;
 				}

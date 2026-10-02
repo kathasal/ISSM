@@ -44,6 +44,11 @@ classdef materials < dynamicprops
 					self.addprop('rheology_B');
 					self.addprop('rheology_n');
 					self.addprop('rheology_law');
+					self.addprop('arrhenius_Aminus');
+					self.addprop('arrhenius_Aplus');
+					self.addprop('arrhenius_Qminus');
+					self.addprop('arrhenius_Qplus');
+					self.addprop('arrhenius_Tref');
 				case 'litho'
 					self.addprop('numlayers');
 					self.addprop('radius');
@@ -126,6 +131,13 @@ classdef materials < dynamicprops
 					self.rheology_B   = 1 * 1e8;
 					self.rheology_n   = 3;
 
+					%Parameters: Arrhenius rheology B
+					self.arrhenius_Aminus = 3.61e-13; %Pa^{-n} s^{-1}
+					self.arrhenius_Aplus  = 1.73e+3; %Pa^{-n} s^{-1}
+					self.arrhenius_Qminus = 6.e+4; %J mol-1
+					self.arrhenius_Qplus  = 13.9e+4; %J mol-1
+					self.arrhenius_Tref   = 263.15; %K
+
 				case 'litho'
 					%we default to a configuration that enables running GIA solutions using giacaron and/or giaivins.
 					self.numlayers=2;
@@ -190,6 +202,16 @@ classdef materials < dynamicprops
 					fielddisplay(self,'rheology_B','flow law parameter [Pa s^(1/n)]');
 					fielddisplay(self,'rheology_n','Glen''s flow law exponent');
 					fielddisplay(self,'rheology_law',['law for the temperature dependance of the rheology: ''None'', ''BuddJacka'', Cuffey'', ''CuffeyTemperate'', ''Paterson'', ''Arrhenius'', ''LliboutryDuval'', ''NyeCO2'', or ''NyeH2O''']);
+					if strcmpi(self.rheology_law,'Arrhenius')
+						disp(sprintf('\n    Arrhenius law:'));
+						disp(sprintf('      A = Aminus * exp(-Qminus/(R*Tstar)), if Tstar < Tref'));
+						disp(sprintf('        = Aplus  * exp(-Qplus/(R*Tstar)),  if Tstar >= Tref'));
+						fielddisplay(self,'arrhenius_Aminus','prefactor in minus part in Arrhenius law [1/Pa^{n}/s]');
+						fielddisplay(self,'arrhenius_Aplus','prefactor in plus part in Arrhenius law [1/Pa^{n}/s]');
+						fielddisplay(self,'arrhenius_Qminus','activation energy in minus part in Arrhenius law [J/mol]');
+						fielddisplay(self,'arrhenius_Qplus','activation energy in plus part in Arrhenius law [J/mol]');
+						fielddisplay(self,'arrhenius_Tref','reference temperature in Arrhenius law [K]');
+					end
 				case 'litho'
 					disp(sprintf('\n      Litho:'));
 					fielddisplay(self,'numlayers','number of layers (default: 2)');
@@ -234,6 +256,16 @@ classdef materials < dynamicprops
 					md = checkfield(md,'fieldname','materials.rheology_B','>',0,'timeseries',1,'NaN',1,'Inf',1);
 					md = checkfield(md,'fieldname','materials.rheology_n','>',0,'size',[md.mesh.numberofelements 1]);
 					md = checkfield(md,'fieldname','materials.rheology_law','values',{'None' 'BuddJacka' 'Cuffey' 'CuffeyTemperate' 'Paterson' 'Arrhenius' 'LliboutryDuval' 'NyeCO2' 'NyeH2O'});
+					if strcmpi(self.rheology_law,'Arrhenius')
+						md = checkfield(md,'fieldname','materials.arrhenius_Aminus','>',0);
+						md = checkfield(md,'fieldname','materials.arrhenius_Aplus','>',0);
+						md = checkfield(md,'fieldname','materials.arrhenius_Qminus','>',0);
+						md = checkfield(md,'fieldname','materials.arrhenius_Qplus','>',0);
+						md = checkfield(md,'fieldname','materials.arrhenius_Tref','>',0);
+						if self.materials.arrhenius_Tref < 0
+							error(['Error: ''arrhenius_Tref'' should be above 0 because its unit is Kelvin, not Celcius degree.']);
+						end
+					end
 				case 'litho'
 					if ~ismember('LoveAnalysis',analyses), return; end
 					md = checkfield(md,'fieldname','materials.numlayers','NaN',1,'Inf',1,'>',0,'numel',1);
@@ -310,6 +342,11 @@ classdef materials < dynamicprops
 					WriteData(fid,prefix,'object',self,'class','materials','fieldname','rheology_B','format','DoubleMat','mattype',1,'timeserieslength',md.mesh.numberofvertices+1,'yts',md.constants.yts);
 					WriteData(fid,prefix,'object',self,'class','materials','fieldname','rheology_n','format','DoubleMat','mattype',2);
 					WriteData(fid,prefix,'data',self.rheology_law,'name','md.materials.rheology_law','format','String');
+					WriteData(fid,prefix,'object',self,'class','materials','fieldname','arrhenius_Aminus','format','Double');
+					WriteData(fid,prefix,'object',self,'class','materials','fieldname','arrhenius_Aplus','format','Double');
+					WriteData(fid,prefix,'object',self,'class','materials','fieldname','arrhenius_Qminus','format','Double');
+					WriteData(fid,prefix,'object',self,'class','materials','fieldname','arrhenius_Qplus','format','Double');
+					WriteData(fid,prefix,'object',self,'class','materials','fieldname','arrhenius_Tref','format','Double');
 				case 'litho'
 					WriteData(fid,prefix,'object',self,'class','materials','fieldname','numlayers','format','Integer');
 					WriteData(fid,prefix,'object',self,'class','materials','fieldname','radius','format','DoubleMat','mattype',3);
@@ -375,6 +412,11 @@ classdef materials < dynamicprops
 					writejs1Darray(fid,[modelname '.materials.rheology_B'],self.rheology_B);
 					writejs1Darray(fid,[modelname '.materials.rheology_n'],self.rheology_n);
 					writejsstring(fid,[modelname '.materials.rheology_law'],self.rheology_law);
+					writejsdouble(fid,[modelname '.materials.arrhenius_Aminus'],self.arrhenius_Aminus);
+					writejsdouble(fid,[modelname '.materials.arrhenius_Aplus'],self.arrhenius_Aplus);
+					writejsdouble(fid,[modelname '.materials.arrhenius_Qminus'],self.arrhenius_Qminus);
+					writejsdouble(fid,[modelname '.materials.arrhenius_Qplus'],self.arrhenius_Qplus);
+					writejsdouble(fid,[modelname '.materials.arrhenius_Tref'],self.arrhenius_Tref);
 				case 'litho'
 					writejsdouble(fid,[modelname '.materials.numlayers'],self.numlayers);
 					writejsdouble(fid,[modelname '.materials.radius'],self.radius);

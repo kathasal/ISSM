@@ -450,6 +450,11 @@ void CreateParameters(Parameters* parameters,IoModel* iomodel,char* rootpath,FIL
 			parameters->AddObject(iomodel->CopyConstantObject("md.constants.gravitational_constant",ConstantsNewtonGravityEnum));
 			parameters->AddObject(iomodel->CopyConstantObject("md.materials.rheology_law",MaterialsRheologyLawEnum));
 			parameters->AddObject(iomodel->CopyConstantObject("md.materials.earth_density",MaterialsEarthDensityEnum));
+			parameters->AddObject(iomodel->CopyConstantObject("md.materials.arrhenius_Aminus",MaterialsArrheniusAminusEnum));
+			parameters->AddObject(iomodel->CopyConstantObject("md.materials.arrhenius_Aplus",MaterialsArrheniusAplusEnum));
+			parameters->AddObject(iomodel->CopyConstantObject("md.materials.arrhenius_Qminus",MaterialsArrheniusQminusEnum));
+			parameters->AddObject(iomodel->CopyConstantObject("md.materials.arrhenius_Qplus",MaterialsArrheniusQplusEnum));
+			parameters->AddObject(iomodel->CopyConstantObject("md.materials.arrhenius_Tref",MaterialsArrheniusTrefEnum));
 
 			break;
 		case MaterialsEnum:{
